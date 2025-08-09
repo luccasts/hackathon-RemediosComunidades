@@ -7,6 +7,8 @@ session = Session()
 
 Base = declarative_base()
 
+
+
 class Remedio(Base):
     __tablename__ = "remedios"
 
@@ -14,13 +16,22 @@ class Remedio(Base):
     nome = Column("nome", String)
     validade = Column("validade", String)
     qntd = Column("quantidade", Integer)
+    
+    def __repr__(self):
+        return f"<Remedio(id={self.id}, nome='{self.nome}', validade='{self.validade}', qntd={self.qntd})>"
+    
 
-    def __init__(self, nome, validade, qntd):
-        self.nome = nome 
-        self.validade = validade
-        self.qntd = qntd
 
-        session.add(self)
-        session.commit()
+class Usuario(Base):
+    __tablename__ = "usuarios"
+
+    id = Column("id", Integer, primary_key=True, autoincrement=True) 
+    nome =  Column("nome", String)
+    email = Column("email", String)
+    senha = Column("senha", String)
+
+    def __repr__(self):
+        return f"<Usuario(id={self.id}, nome='{self.nome}', email='{self.email}', senha={self.senha})>"
 
 Base.metadata.create_all(db)
+
