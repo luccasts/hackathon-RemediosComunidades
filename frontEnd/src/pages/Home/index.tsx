@@ -5,16 +5,18 @@ import { useState } from "react";
 import styles from "./home.module.css";
 
 function Home() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [remedio, setRemedio] = useState("");
+  const [quantidade, setQuantidade] = useState("");
+  const [validade, setValidade] = useState("");
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/login", {
-        email,
-        password,
+        remedio,
+        quantidade,
+        validade,
       });
-      console.log("Login bem-sucedido!", response.data);
+      console.log("Remédio cadastrado!", response.data);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         if (err.response) {
@@ -40,6 +42,7 @@ function Home() {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
+            gap: "2rem",
           }}
         >
           <Typography variant="h2" component="h1" color="primary">
@@ -49,32 +52,40 @@ function Home() {
             <Box>
               <TextField
                 type="text"
-                id="outlined-password-input"
+                id="remedio-input"
                 label="Nome do Remédio"
                 variant="outlined"
                 autoComplete="current-password"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={remedio}
+                onChange={(e) => setRemedio(e.target.value)}
               />
             </Box>
 
             <Box>
               <TextField
                 type="number"
-                id="outlined-password-input"
+                id="quantidade-input"
                 label="Quantidade"
                 autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={quantidade}
+                onChange={(e) => setQuantidade(e.target.value)}
               />
             </Box>
-            <Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Typography variant="subtitle1" component="label" color="primary">
+                Validade
+              </Typography>
               <TextField
                 type="date"
-                id="outlined-password-input"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                id="validade-input"
+                value={validade}
+                onChange={(e) => setValidade(e.target.value)}
               />
             </Box>
             <Box>
