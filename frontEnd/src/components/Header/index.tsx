@@ -11,7 +11,7 @@ import logo from "../../assets/logo.png";
 const Header = () => {
   return (
     <header>
-      <AppBar>
+      <AppBar position="fixed">
         <Toolbar
           sx={{
             display: "flex",
