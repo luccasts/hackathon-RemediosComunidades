@@ -1,7 +1,10 @@
 from models import Usuario, Remedio, session
+from flask import Flask, jsonify
 from sqlalchemy import delete
 
-
+def listar_remedios():
+    remedios = session.query(Remedio).all()
+    return remedios
 
 def adicionar_remedio(nome, validade, qntd):
 
