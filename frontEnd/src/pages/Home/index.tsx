@@ -1,13 +1,16 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import Header from "../../components/Header";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./home.module.css";
 
 function Home() {
   const [remedio, setRemedio] = useState("");
   const [quantidade, setQuantidade] = useState("");
   const [validade, setValidade] = useState("");
+
+  const [data, setData] = useState("");
+  const [loading, setLoading] = useState(true);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
@@ -31,6 +34,20 @@ function Home() {
       }
     }
   }
+
+  useEffect(() => {
+    async function fecthRemedios() {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/remedios");
+        setData(response.data);
+      } catch (erro) {
+        console.log(erro);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fecthRemedios();
+  }, []);
   return (
     <div>
       <Header />
@@ -106,6 +123,19 @@ function Home() {
         >
           Remédios cadastrados.
         </Typography>
+
+        <Box>
+          {loading ? (
+            <div>
+              <h1>Carregando...</h1>
+            </div>
+          ) : (
+            <div>
+              {data}
+              {loading}
+            </div>
+          )}
+        </Box>
       </Box>
     </div>
   );
