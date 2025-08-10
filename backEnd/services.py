@@ -3,9 +3,9 @@ from sqlalchemy import delete
 
 
 
-def adicionar_remedio(nome, validade, qntd):
+def adicionar_remedio(nome, validade, qntd, fornecedor):
 
-    novo = Remedio(nome=nome,validade=validade,qntd=qntd)
+    novo = Remedio(nome=nome,validade=validade,qntd=qntd,fornecedor=fornecedor)
     session.add(novo)
     session.commit()
     

@@ -16,9 +16,10 @@ class Remedio(Base):
     nome = Column("nome", String)
     validade = Column("validade", String)
     qntd = Column("quantidade", Integer)
+    fornecedor = Column("fornecedor", String)
     
     def __repr__(self):
-        return f"<Remedio(id={self.id}, nome='{self.nome}', validade='{self.validade}', qntd={self.qntd})>"
+        return f"<Remedio(id={self.id}, nome='{self.nome}', validade='{self.validade}', qntd={self.qntd}, fornecedor='{self.fornecedor}')>"
     
 
 
