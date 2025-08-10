@@ -3,13 +3,14 @@ import Header from "../../components/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./home.module.css";
+import type { IData } from "../../types/types";
 
 function Home() {
   const [remedio, setRemedio] = useState("");
   const [quantidade, setQuantidade] = useState("");
   const [validade, setValidade] = useState("");
 
-  const [data, setData] = useState("");
+  const [data, setData] = useState<IData[] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -39,17 +40,16 @@ function Home() {
     async function fecthRemedios() {
       try {
         const response = await axios.get("http://127.0.0.1:5000/api/remedios");
-        console.log(response.data);
         setData(response.data);
-        console.log(data, "data");
       } catch (erro) {
-        console.log(erro);
+        console.error(erro);
       } finally {
         setLoading(false);
       }
     }
     fecthRemedios();
   }, []);
+
   return (
     <div>
       <Header />
@@ -126,13 +126,24 @@ function Home() {
           Remédios cadastrados.
         </Typography>
 
-        <Box>
+        <Box textAlign={"center"}>
           {loading ? (
             <div>
               <h1>Carregando...</h1>
             </div>
           ) : (
-            <div>{loading}</div>
+            <div>
+              <ul>
+                {data
+                  ? data.map((d) => (
+                      <li key={d.id}>
+                        {d.nome} - Quantidade: {d.quantidade} - Validade:
+                        {d.validade}
+                      </li>
+                    ))
+                  : ""}
+              </ul>
+            </div>
           )}
         </Box>
       </Box>
