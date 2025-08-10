@@ -39,7 +39,9 @@ function Home() {
     async function fecthRemedios() {
       try {
         const response = await axios.get("http://127.0.0.1:5000/api/remedios");
+        console.log(response.data);
         setData(response.data);
+        console.log(data, "data");
       } catch (erro) {
         console.log(erro);
       } finally {
@@ -130,10 +132,7 @@ function Home() {
               <h1>Carregando...</h1>
             </div>
           ) : (
-            <div>
-              {data}
-              {loading}
-            </div>
+            <div>{loading}</div>
           )}
         </Box>
       </Box>

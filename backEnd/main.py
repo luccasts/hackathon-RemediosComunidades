@@ -10,7 +10,18 @@ medicamentos=[]
 @app.route('/api/remedios',methods=['GET','POST'])
 def cadastrar_remedio():
     if request.method == 'GET':
-        return jsonify(listar_remedios()), 200
+        remedios_db = listar_remedios()
+        lista_remedios = []
+        for remedio in remedios_db:
+            remedio_dict = {
+                "id": remedio.id,
+                "nome": remedio.nome,
+                "quantidade": remedio.qntd,
+                "validade": remedio.validade
+            }
+            lista_remedios.append(remedio_dict)
+        
+        return jsonify(lista_remedios), 200
         
     elif request.method == 'POST':
         data=request.get_json()
