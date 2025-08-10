@@ -12,7 +12,7 @@ function Home() {
     e.preventDefault();
     try {
       const response = await axios.post("http://127.0.0.1:5000/api/remedios", {
-        remedio,
+        nome: remedio,
         quantidade,
         validade,
       });
