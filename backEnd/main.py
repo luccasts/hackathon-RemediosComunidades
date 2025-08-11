@@ -1,4 +1,5 @@
 from services import deletar_remedio, adicionar_remedio, listar_remedios, atualizar_remedio
+from models import db, Remedio
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -44,6 +45,16 @@ def cadastrar_remedio():
         adicionar_remedio(nome = nome, validade = validade, qntd = quantidade)
 
         return jsonify({"mensagem":"Remedio cadastrado com sucesso", "remedio":"novo_remedio"}),201
+    
+@app.route("/api/remedios/<int:id>",methods=["DELETE"])
+
+def deletar_remedio(id):
+    remedio_para_deletar = db.get_or_404(Remedio,id)
+
+    db.session.delete(remedio_para_deletar)
+    db.session.commit()
+    
+    return "", 204
 
 if __name__ == '__main__':
     app.run(debug=True)
