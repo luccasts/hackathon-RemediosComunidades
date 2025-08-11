@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import Header from "../../components/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -23,6 +23,18 @@ function Home() {
     }
     fecthRemedios();
   }, []);
+  async function handleDelete(id: number) {
+    try {
+      const response = await axios.delete(
+        `http://127.0.0.1:5000/api/remedios/${id}`,
+      );
+      setData(response.data);
+    } catch (erro) {
+      console.log(erro);
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div>
       <Header />
@@ -48,17 +60,20 @@ function Home() {
                 <ul>
                   {data
                     ? data.map((d) => (
-                        <li key={d.id}>
-                          {d.nome} - Quantidade: {d.quantidade} - Validade:
-                          {d.validade}
-                        </li>
+                        <div>
+                          <li key={d.id}>
+                            {d.nome} - Quantidade: {d.quantidade} - Validade:
+                            {d.validade}
+                          </li>
+                          <Button onClick={() => handleDelete(d.id)}>
+                            Deletar
+                          </Button>
+                        </div>
                       ))
                     : ""}
                 </ul>
               </div>
-              <div>
-                <EnhancedTable teste={data}></EnhancedTable>
-              </div>
+              <div>{/* <EnhancedTable teste={data}></EnhancedTable> */}</div>
             </div>
           )}
         </Box>
