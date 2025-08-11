@@ -1,60 +1,19 @@
-from services import deletar_remedio, adicionar_remedio, listar_remedios, atualizar_remedio
-from models import db, Remedio
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from routes import registrar_rotas
+from models import db, Remedio
 
 app = Flask(__name__)
 CORS(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-medicamentos = []
-@app.route('/api/remedios', methods = ['GET','POST'])
-def cadastrar_remedio():
-    if request.method == 'GET':
-        remedios_db = listar_remedios()
-        
-        lista_remedios = []
-        
-        for remedio in remedios_db:
-            remedio_dict = {
-                "id": remedio.id,
-                "nome": remedio.nome,
-                "quantidade": remedio.qntd,
-                "validade": remedio.validade
-            }
-            lista_remedios.append(remedio_dict)
-        return jsonify(lista_remedios), 200
-        
-    elif request.method == 'POST':
-        data = request.get_json()
+db.init_app(app)
 
-        nome = data.get("nome")
-        quantidade = data.get("quantidade")
-        validade = data.get("validade")
+with app.app_context():
+    db.create_all()
 
-        if not nome or not quantidade or not validade:
-            return jsonify({"erro":"Todos os campos são obrigatórios"}),400
-
-        novo_remedio={
-            "nome":nome,
-            "quantidade":quantidade,
-            "validade":validade
-        }
-
-        medicamentos.append(novo_remedio)
-
-        adicionar_remedio(nome = nome, validade = validade, qntd = quantidade)
-
-        return jsonify({"mensagem":"Remedio cadastrado com sucesso", "remedio":"novo_remedio"}),201
-    
-@app.route("/api/remedios/<int:id>",methods=["DELETE"])
-
-def deletar_remedio(id):
-    remedio_para_deletar = db.get_or_404(Remedio,id)
-
-    db.session.delete(remedio_para_deletar)
-    db.session.commit()
-    
-    return "", 204
+registrar_rotas(app)
 
 if __name__ == '__main__':
     app.run(debug=True)

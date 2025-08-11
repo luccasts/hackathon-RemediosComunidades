@@ -1,19 +1,12 @@
-from sqlalchemy import create_engine, Column, String, Integer, Boolean, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base
+from flask_sqlalchemy import SQLAlchemy
 
-db = create_engine('sqlite:///backEnd/banco.db',echo=True)
-Session = sessionmaker(bind=db)
-session = Session()
-
-Base = declarative_base()
-
-class Remedio(Base):
+db = SQLAlchemy()
+class Remedio(db.Model):
     __tablename__ = "remedios"
-
-    id = Column("id", Integer, primary_key=True, autoincrement=True)
-    nome = Column("nome", String)
-    validade = Column("validade", String)
-    qntd = Column("quantidade", Integer)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nome = db.Column(db.String(100), nullable=False)
+    validade = db.Column(db.String(100), nullable=False)
+    qntd = db.Column("quantidade", db.Integer, nullable=False)
     
     def __repr__(self):
         return f"<Remedio(id={self.id}, nome='{self.nome}', validade='{self.validade}', qntd={self.qntd})>"
@@ -29,5 +22,5 @@ class Remedio(Base):
 #     def __repr__(self):
 #         return f"<Usuario(id={self.id}, nome='{self.nome}', email='{self.email}', senha={self.senha})>"
 
-Base.metadata.create_all(db)
+
 
