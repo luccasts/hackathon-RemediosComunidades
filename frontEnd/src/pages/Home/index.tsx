@@ -3,8 +3,6 @@ import Header from "../../components/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./home.module.css";
-
-import EnhancedTable from "../../components/Table";
 import type { IData } from "../../types/types";
 
 function Home() {
@@ -26,6 +24,18 @@ function Home() {
   async function handleDelete(id: number) {
     try {
       const response = await axios.delete(
+        `http://127.0.0.1:5000/api/remedios/${id}`,
+      );
+      setData(response.data);
+    } catch (erro) {
+      console.log(erro);
+    } finally {
+      setLoading(false);
+    }
+  }
+  async function handleRefresh(id: number) {
+    try {
+      const response = await axios.put(
         `http://127.0.0.1:5000/api/remedios/${id}`,
       );
       setData(response.data);
@@ -67,6 +77,10 @@ function Home() {
                           </li>
                           <Button onClick={() => handleDelete(d.id)}>
                             Deletar
+                          </Button>
+
+                          <Button onClick={() => handleRefresh(d.id)}>
+                            Editar
                           </Button>
                         </div>
                       ))
