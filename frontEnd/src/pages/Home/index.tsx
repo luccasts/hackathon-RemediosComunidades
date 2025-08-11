@@ -3,8 +3,9 @@ import Header from "../../components/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./home.module.css";
-import type { IData } from "../../types/types";
+
 import EnhancedTable from "../../components/Table";
+import type { IData } from "../../types/types";
 
 function Home() {
   const [data, setData] = useState<IData[] | undefined>(undefined);
