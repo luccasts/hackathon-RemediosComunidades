@@ -15,14 +15,13 @@ function Home() {
         const response = await axios.get("http://127.0.0.1:5000/api/remedios");
         setData(response.data);
       } catch (erro) {
-        console.error(erro);
+        console.log(erro);
       } finally {
         setLoading(false);
       }
     }
     fecthRemedios();
   }, []);
-
   return (
     <div>
       <Header />
