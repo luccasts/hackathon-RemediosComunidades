@@ -1,40 +1,41 @@
-from models import Remedio, session
+from models import Remedio, session, db
 from flask import Flask, jsonify
 from sqlalchemy import delete
 
 def listar_remedios():
-    remedios = session.query(Remedio).all()
+    remedios = Remedio.query.all()
     return remedios
 
 def adicionar_remedio(nome, validade, qntd):
 
     novo = Remedio(nome=nome,validade=validade,qntd=qntd)
-    session.add(novo)
-    session.commit()
-    
-    print(f"Remedio {nome} foi adicionado com o ID {novo.id}")
+    db.session.add(novo)
+    db.session.commit()
+    return novo
 
 def deletar_remedio(remedio_id):
 
-    remedio = session.get(Remedio, remedio_id)
+    remedio = Remedio.query.get(remedio_id)
     if remedio:
-        session.delete(remedio)
-        session.commit()
-
-        print(f"Dado com ID {remedio_id} foi deletado.")
-    else:
-        print(f"Nenhum Dado com o ID {remedio_id} foi encontrado")
-
+        db.session.delete(remedio)
+        db.session.commit()
+        return True
+    return False
+  
 def atualizar_remedio(id_remedio, nome,validade,qntd):
-    dado = session.query(Remedio).filter_by(id=id_remedio).first()
-
-    dado.nome = nome
-    dado.validade = validade
-    dado.qntd = qntd
+    remedio = Remedio.query.get(id_remedio)
+    if not remedio:
+        return None
     
-    session.add(dado)
-    session.commit()
-
+    if nome is not None:
+        remedio.nome = nome
+    if validade is not None:
+        remedio.validade = validade
+    if qntd is not None:    
+        remedio.qntd = qntd
+        
+    db.session.commit()
+    return remedio
 
 
 # def adicionar_usuario(nome, email, senha):
