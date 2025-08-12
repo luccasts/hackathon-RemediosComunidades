@@ -4,14 +4,19 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./home.module.css";
 import type { IData } from "../../types/types";
+import ModalEdit from "../../components/ModalEdit";
+import { remediosService } from "../../api/remediosService";
 
 function Home() {
   const [data, setData] = useState<IData[] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [dataValue, setDataValue] = useState<IData>();
   useEffect(() => {
     async function fecthRemedios() {
       try {
-        const response = await axios.get("http://127.0.0.1:5000/api/remedios");
+        const response = await remediosService.getAllRemedio();
+        console.log(response);
         setData(response.data);
       } catch (erro) {
         console.log(erro);
@@ -23,28 +28,18 @@ function Home() {
   }, []);
   async function handleDelete(id: number) {
     try {
-      const response = await axios.delete(
-        `http://127.0.0.1:5000/api/remedios/${id}`,
-      );
-      setData(response.data);
+      await remediosService.deleteRemedio(id);
     } catch (erro) {
       console.log(erro);
     } finally {
       setLoading(false);
     }
   }
-  async function handleRefresh(id: number) {
-    try {
-      const response = await axios.put(
-        `http://127.0.0.1:5000/api/remedios/${id}`,
-      );
-      setData(response.data);
-    } catch (erro) {
-      console.log(erro);
-    } finally {
-      setLoading(false);
-    }
-  }
+
+  const handleOpen = (d: IData) => {
+    setDataValue(d);
+    setOpen(true);
+  };
   return (
     <div>
       <Header />
@@ -70,7 +65,11 @@ function Home() {
                 <ul>
                   {data
                     ? data.map((d) => (
-                        <div>
+                        <Box
+                          margin={2}
+                          padding={2}
+                          boxShadow={"2px 1px 2px #00000013"}
+                        >
                           <li key={d.id}>
                             {d.nome} - Quantidade: {d.quantidade} - Validade:
                             {d.validade}
@@ -78,11 +77,13 @@ function Home() {
                           <Button onClick={() => handleDelete(d.id)}>
                             Deletar
                           </Button>
-
-                          <Button onClick={() => handleRefresh(d.id)}>
-                            Editar
-                          </Button>
-                        </div>
+                          <Button onClick={() => handleOpen(d)}>Editar</Button>
+                          <ModalEdit
+                            setOpen={setOpen}
+                            open={open}
+                            data={dataValue}
+                          />
+                        </Box>
                       ))
                     : ""}
                 </ul>

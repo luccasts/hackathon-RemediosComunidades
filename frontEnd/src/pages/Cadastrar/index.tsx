@@ -47,7 +47,7 @@ export default function CadastrarPage() {
           }}
         >
           <Typography variant="h2" component="h1" color="primary">
-            Cadastrar Remédio!!!
+            Cadastrar Remédio
           </Typography>
           <form onSubmit={(e) => handleSubmit(e)}>
             <Box>
