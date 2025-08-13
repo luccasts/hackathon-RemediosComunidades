@@ -8,7 +8,6 @@ import ModalEdit from "../../components/ModalEdit";
 import { remediosService } from "../../api/remediosService";
 
 function Home() {
-  console.log(import.meta.env.VITE_API_URL, "apiURL");
   const [data, setData] = useState<IData[]>();
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
