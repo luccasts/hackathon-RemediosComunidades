@@ -1,9 +1,18 @@
 import { axiosInstance } from "./remedosInstance";
 
 export const remediosService = {
-  updateRemedio: async (id: number) => {
+  updateRemedio: async (
+    id: number,
+    nome: string,
+    quantidade: number,
+    validade: string,
+  ) => {
     try {
-      const response = await axiosInstance.put(`/${id}`);
+      const response = await axiosInstance.put(`/${id}`, {
+        nome,
+        quantidade,
+        validade,
+      });
       return response.data;
     } catch (erro) {
       console.error(erro);

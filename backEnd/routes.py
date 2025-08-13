@@ -11,9 +11,9 @@ def registrar_rotas(app):
             {
                   "id": r.id,
                   "nome": r.nome,
-                  "quantidade": r.qntd,
+                  "quantidade": r.quantidade,
                   "validade": r.validade,
-                  "aviso": r.aviso
+                  
               }
           for r in listar_remedios()
           ]
@@ -24,7 +24,7 @@ def registrar_rotas(app):
           novo = adicionar_remedio(
             nome = data.get("nome"),
             quantidade = data.get("quantidade"),
-            validade = data.get("validade")
+            validade = data.get("validade"),
           )
           return jsonify({
             "mensagem":"Remedio adicionado com sucesso",
@@ -39,12 +39,12 @@ def registrar_rotas(app):
       return jsonify({"erro":"Remedio nao encontrado"}), 404
     
     elif request.method == "PUT":
-      data = request.get.json()
+      data = request.get_json()
       remedio = atualizar_remedio(
         id_remedio=id,
         nome=data.get("nome"),
         validade=data.get("validade"),
-        qntd=data.get("quantidade"),
+        quantidade=data.get("quantidade"),
       )
       if remedio:
         return jsonify({
@@ -52,9 +52,8 @@ def registrar_rotas(app):
         "remedio": {
           "id":remedio.id,
           "nome":remedio.nome,
-          "quantidade":remedio.qntd,
+          "quantidade":remedio.quantidade,
           "validade":remedio.validade,
-          "aviso":remedio.aviso
         }
       }), 200
         

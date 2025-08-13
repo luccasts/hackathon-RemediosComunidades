@@ -1,4 +1,4 @@
-from models import Remedio, session, db
+from models import Remedio, db
 from flask import Flask, jsonify
 from sqlalchemy import delete
 
@@ -6,9 +6,9 @@ def listar_remedios():
     remedios = Remedio.query.all()
     return remedios
 
-def adicionar_remedio(nome, validade, qntd):
-
-    novo = Remedio(nome=nome,validade=validade,qntd=qntd)
+def adicionar_remedio(nome, validade, quantidade):
+    quantidade = int(quantidade)
+    novo = Remedio(nome=nome,validade=validade,quantidade=quantidade)
     db.session.add(novo)
     db.session.commit()
     return novo
@@ -22,7 +22,8 @@ def deletar_remedio(remedio_id):
         return True
     return False
   
-def atualizar_remedio(id_remedio, nome,validade,qntd):
+def atualizar_remedio(id_remedio, nome,validade,quantidade):
+   
     remedio = Remedio.query.get(id_remedio)
     if not remedio:
         return None
@@ -31,8 +32,9 @@ def atualizar_remedio(id_remedio, nome,validade,qntd):
         remedio.nome = nome
     if validade is not None:
         remedio.validade = validade
-    if qntd is not None:    
-        remedio.qntd = qntd
+    if quantidade is not None:
+        quantidade = int(quantidade)    
+        remedio.quantidade = quantidade
         
     db.session.commit()
     return remedio

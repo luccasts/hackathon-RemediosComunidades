@@ -1,6 +1,6 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import Header from "../../components/Header";
-import axios from "axios";
+
 import { useEffect, useState } from "react";
 import styles from "./home.module.css";
 import type { IData } from "../../types/types";
@@ -8,27 +8,27 @@ import ModalEdit from "../../components/ModalEdit";
 import { remediosService } from "../../api/remediosService";
 
 function Home() {
-  const [data, setData] = useState<IData[] | undefined>(undefined);
+  const [data, setData] = useState<IData[]>();
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [dataValue, setDataValue] = useState<IData>();
-  useEffect(() => {
-    async function fecthRemedios() {
-      try {
-        const response = await remediosService.getAllRemedio();
-        console.log(response);
-        setData(response.data);
-      } catch (erro) {
-        console.log(erro);
-      } finally {
-        setLoading(false);
-      }
+  async function fecthRemedios() {
+    try {
+      const response = await remediosService.getAllRemedio();
+      setData(response.data);
+    } catch (erro) {
+      console.log(erro);
+    } finally {
+      setLoading(false);
     }
+  }
+  useEffect(() => {
     fecthRemedios();
   }, []);
   async function handleDelete(id: number) {
     try {
       await remediosService.deleteRemedio(id);
+      fecthRemedios();
     } catch (erro) {
       console.log(erro);
     } finally {
@@ -41,17 +41,21 @@ function Home() {
     setOpen(true);
   };
   return (
-    <div>
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      sx={{ gap: { xs: "10rem", lg: "0" } }}
+    >
       <Header />
 
-      <Box className={styles.home}>
+      <Box className={styles.home} component={"main"}>
         <Typography
           variant="h2"
           component="h1"
           color="primary"
           textAlign={"center"}
         >
-          Remédios cadastrados.
+          Remédios cadastrados
         </Typography>
 
         <Box color={"GrayText"} textAlign={"center"}>
@@ -62,38 +66,107 @@ function Home() {
           ) : (
             <div>
               <div>
-                <ul>
+                <Grid
+                  justifyContent={"center"}
+                  container
+                  component={"ul"}
+                  spacing={1}
+                >
                   {data
                     ? data.map((d) => (
-                        <Box
-                          margin={2}
-                          padding={2}
-                          boxShadow={"2px 1px 2px #00000013"}
-                        >
-                          <li key={d.id}>
-                            {d.nome} - Quantidade: {d.quantidade} - Validade:
-                            {d.validade}
-                          </li>
-                          <Button onClick={() => handleDelete(d.id)}>
-                            Deletar
-                          </Button>
-                          <Button onClick={() => handleOpen(d)}>Editar</Button>
-                          <ModalEdit
-                            setOpen={setOpen}
-                            open={open}
-                            data={dataValue}
-                          />
-                        </Box>
+                        <li key={d.id}>
+                          <Box
+                            margin={2}
+                            padding={5}
+                            borderRadius={1}
+                            boxShadow={"2px 1px 2px #00000013"}
+                            width={500}
+                            display={"flex"}
+                            justifyContent={"center"}
+                            flexDirection={"column"}
+                            gap={2}
+                            sx={{ width: { xs: "350px", md: "500px" } }}
+                          >
+                            <Box display={"flex"} alignItems={"Center"} gap={1}>
+                              <Typography
+                                color="primary"
+                                variant="h6"
+                                component={"p"}
+                              >
+                                Nome:
+                              </Typography>
+                              <Typography variant="h6" component={"p"}>
+                                {d.nome}{" "}
+                              </Typography>
+                            </Box>
+                            <Box
+                              display={"flex"}
+                              flexDirection={"column"}
+                              gap={1}
+                            >
+                              <Box display={"flex"} gap={1}>
+                                <Typography
+                                  color="primary"
+                                  variant="h6"
+                                  component={"p"}
+                                >
+                                  Quantidade:
+                                </Typography>
+                                <Typography variant="h6" component={"p"}>
+                                  {d.quantidade}
+                                </Typography>
+                              </Box>
+                              {d.quantidade < 5 ? (
+                                <Box textAlign={"start"}>
+                                  <Typography color="error">
+                                    {d.quantidade < 5
+                                      ? "ESTOQUE ACABANDO!"
+                                      : ""}
+                                  </Typography>
+                                </Box>
+                              ) : (
+                                ""
+                              )}
+                            </Box>
+
+                            <Box display={"flex"} alignItems={"Center"} gap={1}>
+                              <Typography
+                                color="primary"
+                                variant="h6"
+                                component={"p"}
+                              >
+                                Validade:
+                              </Typography>
+                              <Typography variant="h6" component={"p"}>
+                                {d.validade}
+                              </Typography>
+                            </Box>
+                            <Box marginTop={2}>
+                              <Button onClick={() => handleDelete(d.id)}>
+                                Deletar
+                              </Button>
+                              <Button onClick={() => handleOpen(d)}>
+                                Editar
+                              </Button>
+                            </Box>
+                            <ModalEdit
+                              setOpen={setOpen}
+                              open={open}
+                              data={dataValue}
+                              atualizar={fecthRemedios}
+                            />
+                          </Box>
+                        </li>
                       ))
                     : ""}
-                </ul>
+                </Grid>
               </div>
               <div>{/* <EnhancedTable teste={data}></EnhancedTable> */}</div>
             </div>
           )}
         </Box>
       </Box>
-    </div>
+    </Box>
   );
 }
 

@@ -3,20 +3,21 @@ import Header from "../../components/Header";
 import axios from "axios";
 import styles from "./home.module.css";
 import { useState } from "react";
+import { axiosInstance } from "../../api/remedosInstance";
 export default function CadastrarPage() {
-  const [remedio, setRemedio] = useState("");
+  const [nome, setNome] = useState("");
   const [quantidade, setQuantidade] = useState("");
   const [validade, setValidade] = useState("");
-
+  const [message, setMessage] = useState("");
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:5000/api/remedios", {
-        nome: remedio,
+      const response = await axiosInstance.post("", {
+        nome,
         quantidade,
         validade,
       });
-      console.log("Remédio cadastrado!", response.data);
+      setMessage(`${response?.data.mensagem}`);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         if (err.response) {
@@ -52,24 +53,50 @@ export default function CadastrarPage() {
           <form onSubmit={(e) => handleSubmit(e)}>
             <Box>
               <TextField
+                focused
+                color="primary"
                 type="text"
                 id="remedio-input"
                 label="Nome do Remédio"
                 variant="outlined"
                 autoComplete="current-password"
-                value={remedio}
-                onChange={(e) => setRemedio(e.target.value)}
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                sx={{
+                  // Estilo para o placeholder
+                  "& .MuiInputBase-input::placeholder": {
+                    color: "#1976d2",
+                    opacity: 1,
+                  },
+                  // Estilo para o texto digitado
+                  "& .MuiInputBase-input": {
+                    color: "#1976d2", // Adicionei essa linha
+                  },
+                }}
               />
             </Box>
 
             <Box>
               <TextField
+                focused
+                color="primary"
                 type="number"
                 id="quantidade-input"
                 label="Quantidade"
                 autoComplete="current-password"
                 value={quantidade}
                 onChange={(e) => setQuantidade(e.target.value)}
+                sx={{
+                  // Estilo para o placeholder
+                  "& .MuiInputBase-input::placeholder": {
+                    color: "#1976d2",
+                    opacity: 1,
+                  },
+                  // Estilo para o texto digitado
+                  "& .MuiInputBase-input": {
+                    color: "#1976d2", // Adicionei essa linha
+                  },
+                }}
               />
             </Box>
             <Box
@@ -83,10 +110,22 @@ export default function CadastrarPage() {
                 Validade
               </Typography>
               <TextField
+                focused
+                color="primary"
                 type="date"
                 id="validade-input"
                 value={validade}
                 onChange={(e) => setValidade(e.target.value)}
+                sx={{
+                  "& .MuiInputBase-input::placeholder": {
+                    // Use um código de cor hexadecimal ou uma palavra-chave
+                    color: "#1976d2", // Exemplo de azul, ou use 'blue'
+                    opacity: 1, // Garante que a cor seja totalmente visível
+                  },
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Box>
             <Box>
@@ -95,6 +134,14 @@ export default function CadastrarPage() {
               </Button>
             </Box>
           </form>
+
+          {message ? (
+            <Typography color="primary" component={"p"}>
+              {message}
+            </Typography>
+          ) : (
+            ""
+          )}
         </Box>
       </Box>
     </div>

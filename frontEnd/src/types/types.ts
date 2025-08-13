@@ -1,6 +1,6 @@
 export interface IData {
   id: number;
   nome: string;
-  quantidade: string;
+  quantidade: number;
   validade: string;
 }
