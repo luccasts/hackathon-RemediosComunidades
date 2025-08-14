@@ -1,9 +1,9 @@
-.home {
+.cadastrar {
   width: 100%;
   height: 100vh;
 }
 
-.home form {
+.cadastrar form {
   display: flex;
   justify-content: center;
   flex-direction: column;

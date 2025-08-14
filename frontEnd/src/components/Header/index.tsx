@@ -1,15 +1,9 @@
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Box,
-  Button,
-  IconButton,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
+
 import logo from "../../assets/logo.png";
 import { Link } from "react-router";
 import styles from "./Header.module.css";
+
 const Header = () => {
   return (
     <header className={styles.header}>
@@ -40,7 +34,7 @@ const Header = () => {
             </Typography>
           </Box>
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { md: "flex" } }} component={"nav"}>
             <Button color="inherit" component={Link} to={"/"}>
               Home
             </Button>
@@ -48,15 +42,6 @@ const Header = () => {
               Cadastrar Remédio
             </Button>
           </Box>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 4, display: { xs: "block", md: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
         </Toolbar>
       </AppBar>
     </header>

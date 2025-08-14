@@ -1,7 +1,7 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import Header from "../../components/Header";
 import axios from "axios";
-import styles from "./home.module.css";
+import styles from "./cadastrar.module.css";
 import { useState } from "react";
 import { axiosInstance } from "../../api/remedosInstance";
 export default function CadastrarPage() {
@@ -38,7 +38,7 @@ export default function CadastrarPage() {
       <Header />
       <Box>
         <Box
-          className={styles.home}
+          className={styles.cadastrar}
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -47,7 +47,12 @@ export default function CadastrarPage() {
             gap: "2rem",
           }}
         >
-          <Typography variant="h2" component="h1" color="primary">
+          <Typography
+            variant="h2"
+            component="h1"
+            color="primary"
+            textAlign={"center"}
+          >
             Cadastrar Remédio
           </Typography>
           <form onSubmit={(e) => handleSubmit(e)}>
