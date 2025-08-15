@@ -2,7 +2,6 @@ import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import Header from "../../components/Header";
 
 import { useEffect, useState } from "react";
-import styles from "./home.module.css";
 import type { IData } from "../../types/types";
 import ModalEdit from "../../components/ModalEdit";
 import { remediosService } from "../../api/remediosService";
@@ -17,7 +16,7 @@ function Home() {
       const response = await remediosService.getAllRemedio();
       setData(response.data);
     } catch (erro) {
-      console.log(erro);
+      console.error(erro);
     } finally {
       setLoading(false);
     }
@@ -41,14 +40,10 @@ function Home() {
     setOpen(true);
   };
   return (
-    <Box
-      display={"flex"}
-      flexDirection={"column"}
-      sx={{ gap: { xs: "10rem", lg: "0" } }}
-    >
+    <Box display={"flex"} flexDirection={"column"} gap={"10rem"}>
       <Header />
 
-      <Box className={styles.home} component={"main"}>
+      <Box component={"main"}>
         <Typography
           variant="h2"
           component="h1"
@@ -71,6 +66,7 @@ function Home() {
                   container
                   component={"ul"}
                   spacing={1}
+                  sx={{ listStyle: "none" }}
                 >
                   {data
                     ? data.map((d) => (
@@ -80,7 +76,7 @@ function Home() {
                             padding={5}
                             borderRadius={1}
                             boxShadow={"2px 1px 2px #00000013"}
-                            width={500}
+                            maxWidth={500}
                             display={"flex"}
                             justifyContent={"center"}
                             flexDirection={"column"}

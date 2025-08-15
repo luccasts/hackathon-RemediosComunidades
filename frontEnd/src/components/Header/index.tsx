@@ -2,12 +2,11 @@ import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
 
 import logo from "../../assets/logo.png";
 import { Link } from "react-router";
-import styles from "./Header.module.css";
 
 const Header = () => {
   return (
-    <header className={styles.header}>
-      <AppBar position="fixed">
+    <Box component={"header"}>
+      <AppBar position="relative">
         <Toolbar
           sx={{
             display: "flex",
@@ -44,7 +43,7 @@ const Header = () => {
           </Box>
         </Toolbar>
       </AppBar>
-    </header>
+    </Box>
   );
 };
 
